@@ -1,0 +1,16 @@
+name: Update README with Recent Activity
+
+on:
+  workflow_dispatch: 
+  
+jobs:
+  update-readme:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Update README with Recent Activity
+        uses: jasonetco/readme-activity@main
+        env:
+          GITHUB_TOKEN: ${{ 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 }}
