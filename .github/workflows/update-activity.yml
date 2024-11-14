@@ -1,0 +1,17 @@
+name: Update GitHub Activity
+
+on:
+  schedule:
+    - cron: "*/30 * * * *"
+  workflow_dispatch:
+
+jobs:
+  update-activity:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Update GitHub Activity
+        uses: TheDanniCraft/activity-log@v1
+        with:
+          GITHUB_USERNAME: "flystar0526"
+          GITHUB_TOKEN: ${{ secrets.ACTIONSECRET }}
