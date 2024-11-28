@@ -29,3 +29,10 @@ class EditProfileForm(FlaskForm):
     password = PasswordField('新密碼', validators=[Optional(), Length(min=8, max=128)])
     avatar = FileField('頭像')
     submit = SubmitField('儲存')
+
+class PostForm(FlaskForm):
+    title = StringField('標題', validators=[DataRequired(), Length(min=3, max=50)])
+    content = TextAreaField('內容', validators=[Optional(), Length(max=500)])
+    image = FileField('圖片', validators=[Optional(), FileAllowed(['jpg', 'jpeg', 'png'], '只允許 JPG 和 PNG 格式')])
+    submit = SubmitField('發布')
+    

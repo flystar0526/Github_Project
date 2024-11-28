@@ -5,6 +5,7 @@ from models import db, User, Post
 from config import Config
 from auth import auth_bp
 from user import user_bp
+from post import post_bp
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -23,6 +24,7 @@ def load_user(user_id):
 # Register Blueprints
 app.register_blueprint(auth_bp, url_prefix='/auth')
 app.register_blueprint(user_bp, url_prefix='/user')
+app.register_blueprint(post_bp, url_prefix='/post')
 
 @app.route('/')
 @login_required
