@@ -22,3 +22,10 @@ class RegisterForm(FlaskForm):
     ])
     avatar = FileField('頭像')
     submit = SubmitField('註冊')
+
+class EditProfileForm(FlaskForm):
+    email = StringField('Email', render_kw={'readonly': True})
+    name = StringField('名稱', validators=[DataRequired(), Length(min=2, max=30)])
+    password = PasswordField('新密碼', validators=[Optional(), Length(min=8, max=128)])
+    avatar = FileField('頭像')
+    submit = SubmitField('儲存')
