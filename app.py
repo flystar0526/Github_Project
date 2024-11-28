@@ -5,7 +5,10 @@ from models import db, User, Post
 from config import Config
 from auth import auth_bp
 from user import user_bp
+<<<<<<< HEAD
 from post import post_bp
+=======
+>>>>>>> a656dd941dc75b4340e93d60b8dadbac19e482e7
 
 app = Flask(__name__)
 app.config.from_object(Config)
