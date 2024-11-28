@@ -14,7 +14,7 @@
 
       <!-- Create Post Button and User Menu -->
       <div class="d-flex align-items-center">
-        <a href="" class="btn btn-primary me-3"> 建立貼文 </a>
+        <a href="{{ url_for('post.create_post') }}" class="btn btn-primary me-3"> 建立貼文 </a>
 
         <div class="user-menu dropdown">
           <a
@@ -37,7 +37,7 @@
               <a class="dropdown-item" href=""> 個人檔案 </a>
             </li>
             <li>
-              <a class="dropdown-item" href=""> 設定 </a>
+              <a class="dropdown-item" href="{{ url_for('user.edit_profile') }}"> 設定 </a>
             </li>
             <li>
               <a class="dropdown-item" href="{{ url_for('auth.logout') }}">
