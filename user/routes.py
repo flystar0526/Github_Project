@@ -60,3 +60,25 @@ def edit_profile():
         return redirect(previous_url)
 
     return render_template('user/edit_profile.html', form=form)
+
+@user_bp.route('/profile')
+@login_required
+def profile():
+    # User's published posts
+    posts = Post.query.filter_by(user_id=current_user.id).all()
+
+    # User's liked posts
+    liked_posts = Post.query.join(PostLike, Post.id == PostLike.post_id) \
+                            .filter(PostLike.user_id == current_user.id).all()
+
+    # User's favorited posts
+    favorited_posts = Post.query.join(PostFavor, Post.id == PostFavor.post_id) \
+                                .filter(PostFavor.user_id == current_user.id).all()
+
+    return render_template(
+        'user/profile.html', 
+        user=current_user, 
+        posts=posts, 
+        liked_posts=liked_posts, 
+        favorited_posts=favorited_posts
+    )
