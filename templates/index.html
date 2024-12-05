@@ -24,7 +24,7 @@
           class="card-img-top"
           alt="{{ post.title }}"
           style="max-height: 200px; object-fit: cover; cursor: pointer"
-          onclick="window.location.href=''"
+          onclick="window.location.href='{{ url_for('post.post_detail', post_id=post.id) }}'"
         />
         <div class="card-body">
           <h5 class="card-title">{{ post.title }}</h5>
@@ -46,7 +46,7 @@
             <span>收藏 {{ post.favorites_count }}</span>
           </button>
           <a
-            href=""
+            href="{{ url_for('post.post_detail', post_id=post.id) }}"
             class="btn btn-outline-secondary"
           >
             <i class="bi bi-chat-left-text me-1"></i>
@@ -63,10 +63,10 @@
   document.querySelectorAll(".like-btn").forEach((button) => {
     button.addEventListener("click", function () {
       const postId = this.dataset.postId;
-      fetch(/post/like/${postId}, { method: "POST" })
+      fetch(`/post/like/${postId}`, { method: "POST" })
         .then((response) => response.json())
         .then((data) => {
-          this.querySelector("span").textContent = 按讚 ${data.likes_count};
+          this.querySelector("span").textContent = `按讚 ${data.likes_count}`;
         });
     });
   });
@@ -74,12 +74,12 @@
   document.querySelectorAll(".favor-btn").forEach((button) => {
     button.addEventListener("click", function () {
       const postId = this.dataset.postId;
-      fetch(/post/favor/${postId}, { method: "POST" })
+      fetch(`/post/favor/${postId}`, { method: "POST" })
         .then((response) => response.json())
         .then((data) => {
           this.querySelector(
             "span"
-          ).textContent = 收藏 ${data.favorites_count};
+          ).textContent = `收藏 ${data.favorites_count}`;
         });
     });
   });
