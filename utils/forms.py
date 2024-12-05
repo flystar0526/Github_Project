@@ -35,4 +35,7 @@ class PostForm(FlaskForm):
     content = TextAreaField('內容', validators=[Optional(), Length(max=500)])
     image = FileField('圖片', validators=[Optional(), FileAllowed(['jpg', 'jpeg', 'png'], '只允許 JPG 和 PNG 格式')])
     submit = SubmitField('發布')
-    
+
+class CommentForm(FlaskForm):
+    content = TextAreaField('留言', validators=[DataRequired(), Length(max=500)])
+    submit = SubmitField('送出')

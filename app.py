@@ -29,7 +29,9 @@ app.register_blueprint(post_bp, url_prefix='/post')
 @app.route('/')
 @login_required
 def index():
-    return render_template('index.html', user=current_user)
+    # Retrieve all posts
+    posts = Post.query.order_by(Post.id.desc()).all()
+    return render_template('index.html', user=current_user, posts=posts)
 
 if __name__ == '__main__':
     app.run(debug=True)
