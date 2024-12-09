@@ -2,7 +2,7 @@
 <div class="container">
   <div class="d-flex align-items-center mb-4">
     <img
-      src="{{ url_for('static', filename='avatars/' + (user.avatar or 'default-avatar.png')) }}"
+      src="{{ user.avatar or url_for('static', filename='default-avatar.png') }}"
       class="rounded-circle me-3"
       style="width: 100px; height: 100px; object-fit: cover"
       alt="{{ user.name }}"
@@ -22,7 +22,7 @@
       <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
         <div class="card">
           <img
-            src="{{ url_for('static', filename='posts/' + (post.image or 'default-post.png')) }}"
+            src="{{ post.image or url_for('static', filename='default-post.png') }}"
             class="card-img-top"
             alt="{{ post.title }}"
             style="height: 200px; object-fit: cover; cursor: pointer"
@@ -42,7 +42,7 @@
       <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
         <div class="card">
           <img
-            src="{{ url_for('static', filename='posts/' + (post.image or 'default-post.png')) }}"
+            src="{{ post.image or url_for('static', filename='default-post.png') }}"
             class="card-img-top"
             alt="{{ post.title }}"
             style="height: 200px; object-fit: cover; cursor: pointer"
@@ -62,7 +62,7 @@
       <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
         <div class="card">
           <img
-            src="{{ url_for('static', filename='posts/' + (post.image or 'default-post.png')) }}"
+            src="{{ post.image or url_for('static', filename='default-post.png') }}"
             class="card-img-top"
             alt="{{ post.title }}"
             style="height: 200px; object-fit: cover; cursor: pointer"

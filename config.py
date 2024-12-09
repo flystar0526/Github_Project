@@ -10,6 +10,10 @@ class Config:
     SECRET_KEY = secrets.token_hex(16)  # Randomly generated key
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
+    # Google Cloud Storage configuration
+    GCS_BUCKET_NAME = os.getenv('GCS_BUCKET_NAME')
+    GCS_KEY_FILE = os.getenv('GCS_KEY_FILE')  # Service account key file
+
     # Database configuration
     DB_USER = os.getenv('DB_USER')  # Username
     DB_PASSWORD = quote_plus(os.getenv('DB_PASSWORD'))  # URL encoded password

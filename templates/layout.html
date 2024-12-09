@@ -30,7 +30,7 @@
           >
             <img
               src="{{
-                url_for('static', filename='avatars/' + (current_user.avatar or 'default-avatar.png'))
+                current_user.avatar or url_for('static', filename='default-avatar.png')
               }}"
               alt="User Avatar"
               class="rounded-circle"

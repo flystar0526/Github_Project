@@ -10,15 +10,6 @@ __pycache__/
 *.sqlite3
 *.db
 
-# Flask upload files and static files directories
-instance/
-static/avatars/*
-!static/avatars/.gitkeep
-!static/avatars/default-avatar.png
-static/posts/*
-!static/posts/.gitkeep
-!static/posts/default-post.png
-
 # Flask cache or temporary files
 instance/
 tmp/
@@ -51,3 +42,6 @@ htmlcov/
 *.zip
 *.tar.gz
 *.rar
+
+# Google Cloud Storage key file
+gcs_key.json
