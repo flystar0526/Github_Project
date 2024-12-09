@@ -43,5 +43,6 @@ htmlcov/
 *.tar.gz
 *.rar
 
-# Google Cloud Storage key file
+# Google Cloud key
 gcs_key.json
+app.yaml

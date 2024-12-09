@@ -1,0 +1,55 @@
+name: Deploy to Google App Engine
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Deploy to App Engine
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout repository
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Set up Google Cloud SDK
+      - name: Set up Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          service_account_key: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+          export_default_credentials: true
+
+      # Dynamically generate app.yaml
+      - name: Generate app.yaml
+        run: |
+          echo "runtime: python3.11" > app.yaml
+          echo "entrypoint: gunicorn -w 2 -b :\$PORT app:app" >> app.yaml
+          echo "env_variables:" >> app.yaml
+          echo "  FLASK_ENV: production" >> app.yaml
+          echo "  GCS_BUCKET_NAME: ${{ secrets.GCS_BUCKET_NAME }}" >> app.yaml
+          echo "  DB_USER: ${{ secrets.DB_USER }}" >> app.yaml
+          echo "  DB_PASSWORD: ${{ secrets.DB_PASSWORD }}" >> app.yaml
+          echo "  DB_NAME: ${{ secrets.DB_NAME }}" >> app.yaml
+          echo "  DB_HOST: ${{ secrets.DB_HOST }}" >> app.yaml
+          echo "beta_settings:" >> app.yaml
+          echo "  cloud_sql_instances: ${{ secrets.CLOUD_SQL_CONNECTION_NAME }}" >> app.yaml
+          echo "handlers:" >> app.yaml
+          echo "  - url: /static" >> app.yaml
+          echo "    static_dir: static" >> app.yaml
+          echo "  - url: /.*" >> app.yaml
+          echo "    script: auto" >> app.yaml
+
+      # Install dependencies
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      # Deploy to Google App Engine
+      - name: Deploy to App Engine
+        run: gcloud app deploy --quiet
