@@ -16,18 +16,23 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      # Authenticate to Google Cloud
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+
       # Set up Google Cloud SDK
       - name: Set up Google Cloud SDK
         uses: google-github-actions/setup-gcloud@v1
         with:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
-          service_account_key: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
-          export_default_credentials: true
+          install_components: app-engine-python
 
       # Dynamically generate app.yaml
       - name: Generate app.yaml
         run: |
-          echo "runtime: python3.11" > app.yaml
+          echo "runtime: python311" > app.yaml
           echo "entrypoint: gunicorn -w 2 -b :\$PORT app:app" >> app.yaml
           echo "env_variables:" >> app.yaml
           echo "  FLASK_ENV: production" >> app.yaml
