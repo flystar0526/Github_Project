@@ -7,20 +7,20 @@
       <div class="card h-100 shadow-sm">
         <div class="card-header d-flex align-items-center">
           <img
-            src="{{ url_for('static', filename='avatars/' + (post.user.avatar or 'default-avatar.png')) }}"
+            src="{{ post.user.avatar or url_for('static', filename='default-avatar.png') }}"
             class="rounded-circle me-2"
             style="width: 40px; height: 40px; object-fit: cover"
             alt="{{ post.user.name }}"
           />
           <div>
             <h6 class="mb-0">{{ post.user.name }}</h6>
-            <small class="text-muted"
-              >{{ post.timestamp.strftime('%Y-%m-%d %H:%M') }}</small
-            >
+            <small class="text-muted">
+              {{ post.timestamp.strftime('%Y-%m-%d %H:%M') }}
+            </small>
           </div>
         </div>
         <img
-          src="{{ url_for('static', filename='posts/' + (post.image or 'default-post.png')) }}"
+          src="{{ post.image or url_for('static', filename='default-post.png') }}"
           class="card-img-top"
           alt="{{ post.title }}"
           style="max-height: 200px; object-fit: cover; cursor: pointer"
