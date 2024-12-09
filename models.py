@@ -6,16 +6,13 @@ from datetime import datetime
 
 db = SQLAlchemy()
 
-def generate_uuid():
-    return str(uuid4())
-
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
-    id = db.Column(db.String, primary_key=True, default=generate_uuid)
-    name = db.Column(db.String, nullable=False)
-    email = db.Column(db.String, unique=True, nullable=False)
-    password_hash = db.Column(db.String, nullable=False)
-    avatar = db.Column(db.String)
+    id = db.Column(db.UUID(as_uuid=True), primary_key=True, default=uuid4)
+    name = db.Column(db.String(100), nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    password_hash = db.Column(db.String(128), nullable=False)
+    avatar = db.Column(db.String(200), nullable=True)
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -25,12 +22,12 @@ class User(UserMixin, db.Model):
 
 class Post(db.Model):
     __tablename__ = 'posts'
-    id = db.Column(db.String, primary_key=True, default=generate_uuid)
-    title = db.Column(db.String(50), nullable=False)
-    content = db.Column(db.String(500), nullable=True)
-    image = db.Column(db.String(100), nullable=True)
+    id = db.Column(db.UUID(as_uuid=True), primary_key=True, default=uuid4)
+    title = db.Column(db.String(100), nullable=False)
+    content = db.Column(db.Text, nullable=True)
+    image = db.Column(db.String(255), nullable=True)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    user_id = db.Column(db.UUID(as_uuid=True), db.ForeignKey('users.id'), nullable=False)
 
     user = db.relationship('User', backref='posts', lazy=True)
     comments = db.relationship('Comment', backref='post', lazy='dynamic')
@@ -52,21 +49,22 @@ class Post(db.Model):
 
 class Comment(db.Model):
     __tablename__ = 'comments'
-    id = db.Column(db.String, primary_key=True, default=generate_uuid)
-    content = db.Column(db.String(500), nullable=False)
+    id = db.Column(db.UUID(as_uuid=True), primary_key=True, default=uuid4)
+    content = db.Column(db.Text, nullable=False)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
-    post_id = db.Column(db.Integer, db.ForeignKey('posts.id'), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    post_id = db.Column(db.UUID(as_uuid=True), db.ForeignKey('posts.id'), nullable=False)
+    user_id = db.Column(db.UUID(as_uuid=True), db.ForeignKey('users.id'), nullable=False)
+
     user = db.relationship('User', backref='comments')
 
 class PostLike(db.Model):
     __tablename__ = 'posts_like'
-    id = db.Column(db.String, primary_key=True, default=generate_uuid)
-    user_id = db.Column(db.String, db.ForeignKey('users.id'), nullable=False)
-    post_id = db.Column(db.String, db.ForeignKey('posts.id'), nullable=False)
+    id = db.Column(db.UUID(as_uuid=True), primary_key=True, default=uuid4)
+    user_id = db.Column(db.UUID(as_uuid=True), db.ForeignKey('users.id'), nullable=False)
+    post_id = db.Column(db.UUID(as_uuid=True), db.ForeignKey('posts.id'), nullable=False)
 
 class PostFavor(db.Model):
     __tablename__ = 'posts_favor'
-    id = db.Column(db.String, primary_key=True, default=generate_uuid)
-    user_id = db.Column(db.String, db.ForeignKey('users.id'), nullable=False)
-    post_id = db.Column(db.String, db.ForeignKey('posts.id'), nullable=False)
+    id = db.Column(db.UUID(as_uuid=True), primary_key=True, default=uuid4)
+    user_id = db.Column(db.UUID(as_uuid=True), db.ForeignKey('users.id'), nullable=False)
+    post_id = db.Column(db.UUID(as_uuid=True), db.ForeignKey('posts.id'), nullable=False)
