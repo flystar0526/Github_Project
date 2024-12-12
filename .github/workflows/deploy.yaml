@@ -16,6 +16,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      # Use Google Cloud SDK Docker image
+      - name: Set up Google Cloud SDK
+        uses: docker://gcr.io/google.com/cloudsdktool/cloud-sdk:slim
+
       # Authenticate to Google Cloud
       - name: Authenticate to Google Cloud
         run: |
@@ -23,12 +27,30 @@ jobs:
           gcloud auth activate-service-account --key-file=key.json
           gcloud config set project ${{ secrets.GCP_PROJECT_ID }}
 
-      # Set up Google Cloud SDK
-      - name: Set up Google Cloud SDK
-        uses: google-github-actions/setup-gcloud@v1
-        with:
-          project_id: ${{ secrets.GCP_PROJECT_ID }}
-          install_components: app-engine-python
+      # Dynamically generate app.yaml
+      - name: Generate app.yaml
+        run: |
+          echo "runtime: python311" > app.yaml
+          echo "entrypoint: gunicorn -w 2 -b :\$PORT app:app" >> app.yaml
+          echo "env_variables:" >> app.yaml
+          echo "  FLASK_ENV: production" >> app.yaml
+          echo "  GCS_BUCKET_NAME: ${{ secrets.GCS_BUCKET_NAME }}" >> app.yaml
+          echo "  DB_USER: ${{ secrets.DB_USER }}" >> app.yaml
+          echo "  DB_PASSWORD: ${{ secrets.DB_PASSWORD }}" >> app.yaml
+          echo "  DB_NAME: ${{ secrets.DB_NAME }}" >> app.yaml
+          echo "  DB_HOST: ${{ secrets.DB_HOST }}" >> app.yaml
+          echo "beta_settings:" >> app.yaml
+          echo "  cloud_sql_instances: ${{ secrets.CLOUD_SQL_CONNECTION_NAME }}" >> app.yaml
+          echo "handlers:" >> app.yaml
+          echo "  - url: /static" >> app.yaml
+          echo "    static_dir: static" >> app.yaml
+          echo "  - url: /.*" >> app.yaml
+          echo "    script: auto" >> app.yaml
+          echo "automatic_scaling:" >> app.yaml
+          echo "  min_instances: 1" >> app.yaml
+          echo "  max_instances: 3" >> app.yaml
+          echo "  target_cpu_utilization: 0.6" >> app.yaml
+          echo "  target_throughput_utilization: 0.7" >> app.yaml
 
       # Deploy to Google App Engine
       - name: Deploy to App Engine
