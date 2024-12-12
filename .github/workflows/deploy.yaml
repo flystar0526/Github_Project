@@ -48,12 +48,11 @@ jobs:
           echo "    static_dir: static" >> app.yaml
           echo "  - url: /.*" >> app.yaml
           echo "    script: auto" >> app.yaml
-
-      # Install dependencies
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          echo "automatic_scaling:" >> app.yaml
+          echo "  min_instances: 1" >> app.yaml
+          echo "  max_instances: 3" >> app.yaml
+          echo "  target_cpu_utilization: 0.6" >> app.yaml
+          echo "  target_throughput_utilization: 0.7" >> app.yaml
 
       # Deploy to Google App Engine
       - name: Deploy to App Engine
