@@ -16,16 +16,18 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Use Google Cloud SDK Docker image
-      - name: Set up Google Cloud SDK
-        uses: docker://gcr.io/google.com/cloudsdktool/cloud-sdk:slim
-
       # Authenticate to Google Cloud
       - name: Authenticate to Google Cloud
-        run: |
-          echo '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}' > key.json
-          gcloud auth activate-service-account --key-file=key.json
-          gcloud config set project ${{ secrets.GCP_PROJECT_ID }}
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+
+      # Set up Google Cloud SDK
+      - name: Set up Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+        with:
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          install_components: app-engine-python
 
       # Dynamically generate app.yaml
       - name: Generate app.yaml
